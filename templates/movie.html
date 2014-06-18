@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-md-3 col-md-offset-3">
+        <img data-src="holder.js/100%x300/text:{{ movie.title }}" alt="{{ movie.title }}">
+    </div>
+    <div class="col-md-6">
+        <h2>{{ movie.title }}</h2>
+        <br>
+        <p>
+            <strong>Year:</strong> {{ movie.year }}<br/>
+            <strong>Genres:</strong> {{ movie.genres | join(', ') }} <br/>
+            <strong>Avg. Rating:</strong> {{ movie.total_rating // movie.ratings }}
+        </p>
+        <br>
+        <h4>Rating</h4>
+
+        {% if 'userid' in session %}
+            <form class="form-inline" role="form" method="post" action="/rate/{{movie.movieid}}">
+                {% for i in range(1,6) %}
+                    <label class="radio-inline">
+                        {% if rating %}
+                            <input name="rating" type="radio" id="rating{{ i }}" value="{{i}}"
+                                {{ "checked" if rating.rating|round == i }}>{{i}}
+                        {% else %}
+                            <input name="rating" type="radio" id="rating{{ i }}" value="{{i}}">{{i}}
+                        {% endif %}
+                    </label>
+                {% endfor %}
+                &nbsp;&nbsp;
+                <button type="submit" class="btn btn-info">Rate Movie</button>
+            </form>
+        {% else %}
+            <p><a href="/login?next=/movies/{{movie.movieid}}">Login</a> to rate this movie</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-2">
+        <h4>You Might Also Like</h4>
+    </div>
+</div>
+
+
+{% endblock body %}

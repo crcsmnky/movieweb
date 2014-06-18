@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-1">
+        <h2>My Ratings</h2>
+    </div>
+</div>
+
+{% if count > 0 %}
+    {% for row in range(0, page, step) %}
+        <div class="row">
+            <div class="col-md-1">&nbsp;</div>
+            {% for i in range(row, row + step) %}
+                <div class="col-md-2">
+                    <div class="thumbnail">
+                        <a href="/movies/{{movies[i].movieid}}" title="{{movies[i].title}}">
+                            <img data-src="holder.js/100%x180/text:{{movies[i].title}}" alt="{{movies[i].title}}">
+                            <div class="caption">
+                                <h5 align="center">{{movies[i].title}}</h5>
+                                <p class="text-center">
+                                    <strong>Rating: </strong>{{movies[i].rating}}
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <ul class="pager">
+                {% if skip == 0 %}
+                    <li class="previous disabled"><a href="#">&larr; Previous</a></li>
+                {% else %}
+                    <li class="previous"><a href="/ratings?skip={{ skip - 10}}">&larr; Previous</a></li>
+                {% endif %}
+                {% if skip+10 >= count %}
+                    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+                {% else %}
+                    <li class="next"><a href="/ratings?skip={{ skip + 10}}">&rarr; Next</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% else %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-1">
+            <h4>No rated movies</h4>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock body %}

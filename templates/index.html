@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="jumbotron">
+    <h1>MovieWeb</h1>
+    <p>Welcome to MovieWeb. Check out the most popular movies and users or login to see ratings and recommendations.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Top Movies</h3>
+    </div>
+</div>
+
+<div class="row">
+    {% for movie in movies %}
+        <div class="col-md-2">
+            <div class="thumbnail">
+                <a href="/movies/{{movie.movieid}}" title="{{movie.title}}">
+                    <img data-src="holder.js/100%x180/text:{{movie.title}}" alt="{{movie.title}}">
+                    <div class="caption">
+                        <h5 align="center">{{movie.title}}</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Top Users</h3>
+        <ol class="list-group">
+            {% for user in users %}
+                <li class="list-group-item">
+                    <span class="badge">{{user.ratings}}</span>
+                    {{ user.userid }}
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Top Genres</h3>
+        <ol class="list-group">
+            {% for genre in genres %}
+                <li class="list-group-item">
+                    <span class="badge">{{genre.count | int}}</span>
+                    <a href="/genres/{{ genre.name | urlencode }}" title="{{ genre.name }}">{{ genre.name }}</a>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+
+{% endblock body %}

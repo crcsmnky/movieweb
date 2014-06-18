@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+{% with messages = get_flashed_messages(with_categories=true)  %}
+    {% if messages %}
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{category}} alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h3>Login</h3>
+        <form role="form" method="post">
+            <div class="form-group">
+                <label for="userid">User ID</label>
+                <input class="form-control" type="text" id="userid" placeholder="Type in any number between 1 and 71000" name="userid"></input>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>
+
+{% endblock body %}
