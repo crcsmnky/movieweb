@@ -14,7 +14,7 @@
             {% for genre in genres %}
                 <li class="list-group-item">
                     <span class="badge">{{genre.count | int}}</span>
-                    <a href="/genres/{{genre.name|urlencode}}">{{ genre.name }}</a>
+                    <a href="/genre/{{genre.name|urlencode}}">{{ genre.name }}</a>
                 </li>
             {% endfor %}
         </ol>
