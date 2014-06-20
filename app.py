@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 app.config['MONGO_HOST'] = 'localhost'
 app.config['MONGO_PORT'] = 27017
-app.config['MONGO_DBNAME'] = 'movielens'
+app.config['MONGO_DBNAME'] = 'movielens-small'
 
 app.secret_key = '34ef8d4064770c8f97f2b0e060bb91d0'
 
@@ -45,15 +45,17 @@ def movies():
 @login_required
 def rate(movieid):
     userid = session['userid']
-    doc = {'$set': {
+    query = {
         'userid': userid,
-        'movieid': movieid,
+        'movieid': movieid
+    }
+    update = {'$set': {
         'rating': int(request.form['rating']),
         'ts': datetime.now()
     }}
-    mongo.db.ratings.update(doc, upsert=True)
+    mongo.db.ratings.update(query, update, upsert=True)
 
-    return redirect(url_for('movies', movieid=movieid))
+    return redirect('/movies/{movieid}'.format(movieid=movieid))
 
 
 @app.route('/movies/<int:movieid>', methods=['GET'])
@@ -63,10 +65,24 @@ def movie(movieid):
     if 'userid' in session:
         userid = session['userid']
         rating = mongo.db.ratings.find_one({'movieid': movieid, 'userid': userid})
+        recs = mongo.db.predictions.find({'userid': userid}).sort(
+            'rating', pymongo.DESCENDING).limit(100)
+        movieids = [r['movieid'] for r in recs]
+
+        try:
+            movieids.remove(movie['movieid'])
+        except:
+            pass
+
+        movies = mongo.db.movies.find({'movieid': {'$in': movieids },
+            'genres': {'$in': movie['genres']}}).limit(10)
+
     else:
         rating = None
+        movies = None
+        movieids = []
 
-    return render_template('movie.html', movie=movie, rating=rating)
+    return render_template('movie.html', movie=movie, rating=rating, movies=movies, page=10, step=5, count=len(movieids))
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -108,13 +124,15 @@ def recommendations():
         {'userid': session['userid']}).sort(
             'rating', pymongo.DESCENDING).skip(skip).limit(10)
     count = recs.count()
-    recs = {r['movied']: r for r in recs}
+    recs = {r['movieid']: r for r in recs}
     movies = mongo.db.movies.find({'movieid' : {'$in': recs.keys()}})
 
+    ret = []
     for movie in movies:
         movie['rating'] = recs[movie['movieid']]['rating']
+        ret.append(movie)
 
-    return render_template('recommendations.html', movies=movies, count=count, skip=skip, step=5, page=10)
+    return render_template('recommendations.html', movies=ret, count=count, skip=skip, step=5, page=10)
 
 
 @app.route('/ratings', methods=['GET'])
@@ -142,7 +160,7 @@ def genres():
     return render_template('genres.html', genres=genres)
 
 
-@app.route('/genres/<name>', methods=['GET'])
+@app.route('/genre/<name>', methods=['GET'])
 def genre(name):
     skip = int(request.args.get('skip', 0))
     movies = mongo.db.movies.find({'genres': name}).sort('ratings', pymongo.DESCENDING).skip(skip).limit(20)
