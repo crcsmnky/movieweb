@@ -2,8 +2,11 @@ Flask==0.10.1
 Flask-PyMongo==0.3.0
 Jinja2==2.7.2
 MarkupSafe==0.23
+PIL==1.1.7
 Werkzeug==0.9.4
 itsdangerous==0.24
 pymongo==2.7.1
+requests==2.3.0
+tmdbsimple==0.3.0
 wsgiref==0.1.2
 yolk==0.4.3

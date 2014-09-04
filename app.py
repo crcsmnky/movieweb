@@ -6,11 +6,12 @@ import pymongo
 from datetime import datetime
 from functools import wraps
 
+
 app = Flask(__name__)
 
 app.config['MONGO_HOST'] = 'localhost'
 app.config['MONGO_PORT'] = 27017
-app.config['MONGO_DBNAME'] = 'movielens-small'
+app.config['MONGO_DBNAME'] = 'movielens'
 
 app.secret_key = '34ef8d4064770c8f97f2b0e060bb91d0'
 

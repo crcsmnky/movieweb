@@ -16,7 +16,11 @@
             <div class="col-md-2">
                 <div class="thumbnail">
                     <a href="/movies/{{movies[i].movieid}}" title="{{movies[i].title}}">
-                        <img data-src="holder.js/100%x180/text:{{movies[i].title}}" alt="{{movies[i].title}}">
+                        {% if movies[i].poster is not defined %}
+                            <img data-src="holder.js/100%x180/text:{{movies[i].title}}" alt="{{movies[i].title}}">
+                        {% else %}
+                            <img src="{{ movies[i].poster }}" alt="{{ movies[i].title }}">
+                        {% endif %}
                         <div class="caption">
                             <h5 align="center">{{movies[i].title}}</h5>
                             <p class="text-center">
@@ -36,12 +40,12 @@
             {% if skip == 0 %}
                 <li class="previous disabled"><a href="#">&larr; Previous</a></li>
             {% else %}
-                <li class="previous"><a href="/movies?skip={{ skip - 10}}">&larr; Previous</a></li>
+                <li class="previous"><a href="/movies?skip={{ skip - page }}">&larr; Previous</a></li>
             {% endif %}
             {% if skip+10 >= count %}
                 <li class="next disabled"><a href="#">&rarr; Next</a></li>
             {% else %}
-                <li class="next"><a href="/movies?skip={{ skip + 10}}">&rarr; Next</a></li>
+                <li class="next"><a href="/movies?skip={{ skip + page }}">&rarr; Next</a></li>
             {% endif %}
         </ul>
     </div>

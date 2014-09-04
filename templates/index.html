@@ -18,7 +18,11 @@
         <div class="col-md-2">
             <div class="thumbnail">
                 <a href="/movies/{{movie.movieid}}" title="{{movie.title}}">
-                    <img data-src="holder.js/100%x180/text:{{movie.title}}" alt="{{movie.title}}">
+                    {% if movie.poster is not defined %}
+                        <img data-src="holder.js/100%x180/text:{{movie.title}}" alt="{{movie.title}}">
+                    {% else %}
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                    {% endif %}
                     <div class="caption">
                         <h5 align="center">{{movie.title}}</h5>
                     </div>
@@ -48,7 +52,7 @@
             {% for genre in genres %}
                 <li class="list-group-item">
                     <span class="badge">{{genre.count | int}}</span>
-                    <a href="/genres/{{ genre.name | urlencode }}" title="{{ genre.name }}">{{ genre.name }}</a>
+                    <a href="/genre/{{ genre.name | urlencode }}" title="{{ genre.name }}">{{ genre.name }}</a>
                 </li>
             {% endfor %}
         </ol>
