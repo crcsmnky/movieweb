@@ -1,28 +1,19 @@
-# MovieWeb Demo App
+# Hello and Welcome to MovieWeb
 
-## Setup
+MovieWeb is a project meant to demonstrate some of the particulars of [Istio](http://istio.io). 
 
-    $ pip install -r requirements.txt
+## Sample Data
 
-## Data
+This sample uses data from [MovieLens](https://grouplens.org/datasets/movielens/), specifically the ["latest small"](http://files.grouplens.org/datasets/movielens/ml-latest-small.zip) dataset.
 
-- Download [MovieLens 10M](http://grouplens.org/datasets/movielens/) archive and unzip
-- Load the dataset by running the following:
+## Deploying
 
-    $ python dataset/movielens.py [/path/to/movies.dat] [/path/to/ratings.dat]
+### Kubernetes
 
-The script will import the data set and create the following collections (with indexes):
+### MongoDB
 
-- movies
-- users
-- ratings
-- genres
+### Microservices
 
-## Running
+## Usage
 
-    $ python app.py
-
-## Notes
-
-The script assumes that MongoDB is running on `localhost` and the database name `movielens`
-
+## Cleanup
