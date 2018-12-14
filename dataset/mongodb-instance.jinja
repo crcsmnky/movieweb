@@ -1,0 +1,48 @@
+resources:
+- type: compute.v1.instance
+  name: {{ env["name"] }}
+  properties:
+    zone: {{ properties["zone"] }}
+    machineType: zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
+    serviceAccounts:
+    - email: default
+      scopes:
+        - https://www.googleapis.com/auth/devstorage.read_only
+        - https://www.googleapis.com/auth/logging.write
+        - https://www.googleapis.com/auth/monitoring.write
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        diskSizeGb: {{ properties["diskSize"] }}
+        diskType: zones/{{ properties["zone"] }}/diskTypes/pd-ssd
+        sourceImage: projects/debian-cloud/global/images/family/debian-9
+    networkInterfaces:
+    - network: global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          cd /root
+
+          curl https://www.mongodb.org/static/pgp/server-4.0.asc | apt-key add -
+          
+          echo 'deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.0 main' | tee -a /etc/apt/sources.list.d/mongodb-org-4.0.list
+          
+          apt-get update -y && apt-get install -y mongodb-org
+
+          sed -i '/  bindIp: 127.0.0.1/c\  bindIp: 127.0.0.1,{{ env["name"] }}.{{ properties["zone"] }}.c.{{ env["project"] }}.internal' /etc/mongod.conf
+
+          systemctl enable mongod
+          systemctl start mongod
+
+          gsutil -m cp -r gs://movielens-mongodb/* .
+          mongorestore -d movieweb --noIndexRestore movieweb/
+
+

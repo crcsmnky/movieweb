@@ -1,0 +1,11 @@
+imports:
+- path: mongodb-instance.jinja
+
+resources:
+- name: mongodb-instance
+  type: mongodb-instance.jinja
+  properties:
+    zone: us-central1-f
+    diskSize: 50
+    machineType: n1-standard-1
+    
