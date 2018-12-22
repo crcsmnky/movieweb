@@ -19,16 +19,16 @@ app.secret_key = '34ef8d4064770c8f97f2b0e060bb91d0'
 
 services = {
     "movies": {
-        "host": "http://movies:5000", "endpoint": "movies"
+        "host": "http://moviweb-movies:6000", "endpoint": "movies"
     },
     "genres": {
-        "host": "http://genres:5000", "endpoint": "genres"
+        "host": "http://moviweb-genres:7000", "endpoint": "genres"
     },
     "ratings": {
-        "host": "http://ratings:5000", "endpoint": "ratings"
+        "host": "http://moviweb-ratings:8000", "endpoint": "ratings"
     },
     "users": {
-        "host": "http://users:5000", "endpoint": "users"
+        "host": "http://moviweb-users:9000", "endpoint": "users"
     }
 }
 
@@ -37,7 +37,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user' not in session:
-            return redirect(url_for('login', next=request.url))
+            return jsonify({'error': 'login required'}), 401
         return f(*args, **kwargs)
     return decorated_function
 
