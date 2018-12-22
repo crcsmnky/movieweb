@@ -4,7 +4,7 @@ COPY ../requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend.py /opt/movieweb/
+COPY frontend.py /opt/movieweb/
 COPY ../requirements.txt /opt/movieweb/
 
 WORKDIR /opt/microservices
@@ -12,4 +12,4 @@ WORKDIR /opt/microservices
 EXPOSE 5000
 ENV PORT 5000
 
-CMD python backend.py
+CMD python frontend.py
