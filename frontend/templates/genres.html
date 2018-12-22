@@ -2,25 +2,19 @@
 
 {% block body %}
 
-<div class="row">
-    <div class="col-md-8 col-md-offset-1">
-        <h2>Genres</h2>
-    </div>
-</div>
+<h1 class="display-4 text-center mt-4">Genres</h1>
 
 <div class="row">
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-4 offset-md-4">
         <ol class="list-group">
             {% for genre in genres %}
-                <li class="list-group-item">
-                    <span class="badge">{{genre.count | int}}</span>
-                    <a href="/genre/{{genre.name|urlencode}}">{{ genre.name }}</a>
+                <li class="border-bottom border-light list-group-item d-flex justify-content-between align-items-center">
+                    <a href="/genres/{{ genre.name | urlencode }}" title="{{ genre.name }}">{{ genre.name }}</a>
+                    <span class="badge badge-primary badge-pill">{{genre.count | int}}</span>
                 </li>
             {% endfor %}
-        </ol>
+        </ol>    
     </div>
-
 </div>
-
 
 {% endblock body %}

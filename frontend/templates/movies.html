@@ -2,54 +2,46 @@
 
 {% block body %}
 
-<div class="row">
-    <div class="col-md-8 col-md-offset-1">
-        <h2>Movies</h2>
-    </div>
-</div>
-
-
-{% for row in range(0, page, step) %}
-    <div class="row">
-        <div class="col-md-1">&nbsp;</div>
-        {% for i in range(row, row + step) %}
-            <div class="col-md-2">
-                <div class="thumbnail">
-                    <a href="/movies/{{movies[i].movieid}}" title="{{movies[i].title}}">
-                        {% if movies[i].poster is not defined %}
-                            <img data-src="holder.js/100%x180/text:{{movies[i].title}}" alt="{{movies[i].title}}">
-                        {% else %}
-                            <img src="{{ movies[i].poster }}" alt="{{ movies[i].title }}">
-                        {% endif %}
-                        <div class="caption">
-                            <h5 align="center">{{movies[i].title}}</h5>
-                            <p class="text-center">
-                                <strong>Avg Rating: </strong>{{movies[i].total_rating // movies[i].ratings }}
-                            </p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-{% endfor %}
+<h1 class="display-4 text-center my-4">Movies</h1>
 
 <div class="row">
-    <div class="col-md-4 col-md-offset-4">
-        <ul class="pager">
-            {% if skip == 0 %}
-                <li class="previous disabled"><a href="#">&larr; Previous</a></li>
-            {% else %}
-                <li class="previous"><a href="/movies?skip={{ skip - page }}">&larr; Previous</a></li>
-            {% endif %}
-            {% if skip+10 >= count %}
-                <li class="next disabled"><a href="#">&rarr; Next</a></li>
-            {% else %}
-                <li class="next"><a href="/movies?skip={{ skip + page }}">&rarr; Next</a></li>
-            {% endif %}
-        </ul>
-    </div>
+    {% for movie in movies %}
+        <div class="col-md-3 text-center">
+            <a class="text-primary" href="/movies/{{movie.movieid}}" title="{{movie.title}}">
+                {% if movie.poster is not defined %}
+                    <img data-src="holder.js/154x231?text={{movie.title}}" alt="{{movie.title}}">
+                {% else %}
+                    <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                {% endif %}
+                <h5 class="mt-2">{{movie.title}}</h5>
+            </a>        
+        </div>
+    {% endfor %}
 </div>
+
+<nav>
+    <ul class="pagination pagination-lg justify-content-center">
+        {% if skip == 0 %}
+            <li class="page-item disabled">
+                <a class="page-link px-4" href="#">&larr; Prev</a>
+            </li>
+        {% else %}
+            <li class="page-item">
+                <a class="text-info page-link px-4" href="/movies?skip={{ skip - page }}">&larr; Prev</a>
+            </li>
+        {% endif %}
+
+        {% if skip+10 >= count %}
+            <li class="page-item disabled">
+                <a class="page-link px-4" href="#">&rarr; Next</a>
+            </li>
+        {% else %}
+            <li class="page-item">
+                <a class="text-info page-link px-4" href="/movies?skip={{ skip + page }}">Next &rarr;</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
 
 
 {% endblock body %}

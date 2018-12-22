@@ -3,60 +3,41 @@
 {% block body %}
 
 <div class="jumbotron">
-    <h1>MovieWeb</h1>
-    <p>Welcome to MovieWeb. Check out the most popular movies and users or login to see ratings and recommendations.</p>
+    <h1 class="display-3">Hello and welcome to MovieWeb!</h1>
+    <p class="lead">Check out the most popular movies and genres, or browse the collection.</p>
 </div>
 
 <div class="row">
-    <div class="col-md-6">
-        <h3>Top Movies</h3>
-    </div>
-</div>
-
-<div class="row">
-    {% for movie in movies %}
-        <div class="col-md-2">
-            <div class="thumbnail">
-                <a href="/movies/{{movie.movieid}}" title="{{movie.title}}">
-                    {% if movie.poster is not defined %}
-                        <img data-src="holder.js/100%x180/text:{{movie.title}}" alt="{{movie.title}}">
-                    {% else %}
-                        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                    {% endif %}
-                    <div class="caption">
-                        <h5 align="center">{{movie.title}}</h5>
-                    </div>
-                </a>
-            </div>
+    <div class="col-md-8 border-right">
+        <h1 class="display-4">Top Movies</h1>
+        <div class="row">
+            {% for movie in movies %}
+                <div class="col-md-3 text-center">
+                    <a class="text-primary" href="/movies/{{movie.movieid}}" title="{{movie.title}}">
+                        {% if movie.poster is not defined %}
+                            <img data-src="holder.js/154x231?text={{movie.title}}" alt="{{movie.title}}">
+                        {% else %}
+                            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                        {% endif %}
+                        <h5 class="mt-2">{{movie.title}}</h5>
+                    </a>        
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <h3>Top Users</h3>
-        <ol class="list-group">
-            {% for user in users %}
-                <li class="list-group-item">
-                    <span class="badge">{{user.ratings}}</span>
-                    {{ user.userid }}
-                </li>
-            {% endfor %}
-        </ol>
     </div>
 
-    <div class="col-md-6">
-        <h3>Top Genres</h3>
-        <ol class="list-group">
-            {% for genre in genres %}
-                <li class="list-group-item">
-                    <span class="badge">{{genre.count | int}}</span>
-                    <a href="/genre/{{ genre.name | urlencode }}" title="{{ genre.name }}">{{ genre.name }}</a>
-                </li>
-            {% endfor %}
-        </ol>
+    <div class="col-md-4">
+        <h1 class="display-4">Top Genres</h1>
+            <ol class="list-group">
+                {% for genre in genres %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="/genres/{{ genre.name | urlencode }}" title="{{ genre.name }}">{{ genre.name }}</a>
+                        <span class="badge badge-primary badge-pill">{{genre.count | int}}</span>
+                    </li>
+                {% endfor %}
+            </ol>
     </div>
+
 </div>
 
 {% endblock body %}

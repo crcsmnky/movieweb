@@ -2,53 +2,43 @@
 
 {% block body %}
 
+<h1 class="display-4 text-center my-4">{{ movie.title }}</h1>
+
 <div class="row">
-    <div class="col-md-3 col-md-offset-3">
+    <div class="col-md text-center">
         {% if movie.poster is not defined %}
-            <img data-src="holder.js/100%x180/text:{{movie.title}}" alt="{{movie.title}}">
+            <img data-src="holder.js/154x231?text={{movie.title}}" alt="{{movie.title}}">
         {% else %}
             <img src="{{ movie.poster }}" alt="{{ movie.title }}">
         {% endif %}
     </div>
-    <div class="col-md-6">
-        <h2>{{ movie.title }}</h2>
-        <br>
-        <p>
-            <strong>Year:</strong> {{ movie.year }}<br/>
-            <strong>Genres:</strong> {{ movie.genres | join(', ') }} <br/>
-            <strong>Avg. Rating:</strong> {{ movie.total_rating // movie.ratings }}
-        </p>
-        <br>
-        <h4>Rating</h4>
+</div>
 
-        {% if 'userid' in session %}
-            <form class="form-inline" role="form" method="post" action="/rate/{{movie.movieid}}">
-                {% for i in range(1,6) %}
-                    <label class="radio-inline">
-                        {% if rating %}
-                            <input name="rating" type="radio" id="rating{{ i }}" value="{{i}}"
-                                {{ "checked" if rating.rating|round == i }}>{{i}}
-                        {% else %}
-                            <input name="rating" type="radio" id="rating{{ i }}" value="{{i}}">{{i}}
-                        {% endif %}
-                    </label>
-                {% endfor %}
-                &nbsp;&nbsp;
-                <button type="submit" class="btn btn-info">Rate Movie</button>
-            </form>
-        {% else %}
-            <p><a href="/login?next=/movies/{{movie.movieid}}">Login</a> to rate this movie</p>
-        {% endif %}
+<div class="row mt-4">
+    <div class="col-md text-center">
+        <h5>Year <span class="badge badge-info">{{ movie.year }}</span></h5>
+        <h5>
+            Avg. Rating 
+            <span class="badge badge-info">
+                {{ movie.total_rating // movie.ratings }}
+            </span>
+        </h5>
+        <h5>Genres</h5>
+        <h5>
+            {% for g in movie.genres %}
+                <a class="btn btn-raised btn-primary mx-3" href="/genres/{{ g | urlencode }}">{{ g }}</a>
+            {% endfor %}
+        </h5>
     </div>
 </div>
 
-{% if count > 0 %}
+<!-- {% if 0 > 0 %}
     <div class="row">
         <div class="col-md-4 col-md-offset-1">
             <h4>You Might Also Like</h4>
         </div>
     </div>
-    {% for row in range(0, page, step) %}
+    {% for row in range(0, page, 5) %}
         <div class="row">
             <div class="col-md-1">&nbsp;</div>
             {% for i in range(row, row + step) %}
@@ -70,6 +60,6 @@
         </div>
     {% endfor %}
 
-{% endif %}
+{% endif %} -->
 
 {% endblock body %}
