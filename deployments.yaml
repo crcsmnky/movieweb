@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movieweb-frontend
+  labels:
+    app: movieweb-frontend
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: movieweb-frontend
+  template:
+    metadata:
+      labels:
+        app: movieweb-frontend
+    spec:
+      containers:
+      - name: movieweb-frontend
+        image: gcr.io/movieweb/movieweb-frontend
+        ports:
+        - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movieweb-backend
+  labels:
+    app: movieweb-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movieweb-backend
+  template:
+    metadata:
+      labels:
+        app: movieweb-backend
+    spec:
+      containers:
+      - name: movieweb-backend
+        image: gcr.io/movieweb/movieweb-backend
+        env:
+        - name: MONGODB_HOST
+          value: "mongodb-instance.us-central1-f.c.clown-shoes-3000.internal"
+        ports:
+        - containerPort: 6000

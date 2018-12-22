@@ -1,0 +1,13 @@
+apiVersion: skaffold/v1beta1
+kind: Config
+build:
+  artifacts:
+  - image: gcr.io/movieweb/movieweb-frontend
+    context: ./frontend/
+  - image: gcr.io/movieweb/movieweb-backend
+    context: ./backend/
+deploy:
+  kubectl:
+    manifests:
+    - ./deployments.yaml
+    - ./services.yaml

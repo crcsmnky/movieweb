@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: movieweb-frontend
+  labels:
+    app: movieweb-frontend
+spec:
+  ports:
+  - port: 5000
+    name: http-frontend
+  selector:
+    app: movieweb-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movieweb-backend
+  labels:
+    app: movieweb-backend
+spec:
+  ports:
+  - port: 6000
+    name: http-backend
+  selector:
+    app: movieweb-backend
