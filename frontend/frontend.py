@@ -23,7 +23,7 @@ def index():
     tops = {}
     for res in ['movies', 'genres']:
         resp = requests.get(BASE_URL + '/{res}/top'.format(res=res))
-        tops[res] = json.loads(resp.json())
+        tops[res] = resp.json()
 
     return render_template('index.html', movies=tops['movies'], genres=tops['genres'])
 
@@ -32,10 +32,10 @@ def index():
 def movies():
     skip = int(request.args.get('skip', 0))
     mresp = requests.get(BASE_URL + '/movies/all?skip={skip}'.format(skip=skip))
-    movies = json.loads(mresp.json())
+    movies = mresp.json()
     
     cresp = requests.get(BASE_URL + '/movies/count')
-    count = json.loads(cresp.json())['count']
+    count = cresp.json()['count']
 
     return render_template('movies.html', movies=movies, skip=skip, page=20, count=count)
 
@@ -45,14 +45,14 @@ def movie(movieid):
     resp = requests.get(BASE_URL + '/movies/{movieid}'.format(movieid=movieid))
     if resp.status_code == 404:
         abort(resp.status_code)
-    movie = json.loads(resp.json())
+    movie = resp.json()
     return render_template('movie.html', movie=movie)
 
 
 @app.route('/genres', methods=['GET'])
 def genres():
     resp = requests.get(BASE_URL + '/genres/all')
-    genres = json.loads(resp.json())
+    genres = resp.json()
     return render_template('genres.html', genres=genres)
 
 
@@ -68,14 +68,14 @@ def genre(name):
     if resp.status_code == 404:
         abort(resp.status_code)
 
-    movies = json.loads(resp.json())
+    movies = resp.json()
 
     cresp = requests.get(
         BASE_URL + '/genres/count/{name}'.format(
             name=name
         )
     )
-    count = json.loads(cresp.json())['count']
+    count = cresp.json()['count']
 
     return render_template('genre.html', genre=name, movies=movies, skip=skip, page=20, count=count)
 
