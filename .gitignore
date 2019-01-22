@@ -54,3 +54,4 @@ docs/_build/
 
 .vscode
 .DS_Store
+*credentials.json
