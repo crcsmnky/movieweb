@@ -16,31 +16,111 @@ spec:
     spec:
       containers:
       - name: movieweb-frontend
-        image: gcr.io/movieweb/movieweb-frontend
+        image: gcr.io/clown-shoes-3000/movieweb-frontend
         ports:
         - containerPort: 5000
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: movieweb-backend
+  name: movieweb-backend-mongodb
   labels:
     app: movieweb-backend
+    version: mongodb
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: movieweb-backend
+      version: mongodb
   template:
     metadata:
       labels:
         app: movieweb-backend
+        version: mongodb
     spec:
       containers:
       - name: movieweb-backend
-        image: gcr.io/movieweb/movieweb-backend
+        image: gcr.io/clown-shoes-3000/movieweb-backend-mongodb:1.0
         env:
         - name: MONGODB_HOST
           value: "mongodb-instance.us-central1-f.c.clown-shoes-3000.internal"
         ports:
         - containerPort: 6000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movieweb-backend-firestore
+  labels:
+    app: movieweb-backend
+    version: firestore
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: movieweb-backend
+      version: firestore
+  template:
+    metadata:
+      labels:
+        app: movieweb-backend
+        version: firestore
+    spec:
+      containers:
+        - name: movieweb-backend
+          image: gcr.io/clown-shoes-3000/movieweb-backend-firestore:1.0
+          ports:
+          - containerPort: 6000
+          volumeMounts:
+            - name: cloudfirestore-credentials
+              mountPath: /secrets/cloudfirestore
+              readOnly: true
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /secrets/cloudfirestore/cloudfirestore-credentials.json
+      volumes:
+        - name: cloudfirestore-credentials
+          secret:
+            secretName: cloudfirestore-credentials
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movieweb-backend-cloudsql
+  labels:
+    app: movieweb-backend
+    version: cloudsql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: movieweb-backend
+      version: cloudsql
+  template:
+    metadata:
+      labels:
+        app: movieweb-backend
+        version: cloudsql
+    spec:
+      containers:
+        - name: movieweb-backend
+          image: gcr.io/clown-shoes-3000/movieweb-backend-cloudsql:1.0
+          ports:
+          - containerPort: 6000
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          command: ["/cloud_sql_proxy",
+                    "--instances=clown-shoes-3000:us-central1:movielens=tcp:3306",
+                    "--credential_file=/secrets/cloudsql/cloudsql-credentials.json"]
+          securityContext:
+            runAsUser: 2
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: cloudsql-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+      volumes:
+        - name: cloudsql-credentials
+          secret:
+            secretName: cloudsql-credentials

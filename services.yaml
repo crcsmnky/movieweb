@@ -14,12 +14,44 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: movieweb-backend
+  name: movieweb-backend-mongodb
   labels:
     app: movieweb-backend
+    version: mongodb
 spec:
   ports:
   - port: 6000
-    name: http-backend
+    name: http-backend-mongodb
   selector:
     app: movieweb-backend
+    version: mongodb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movieweb-backend-firestore
+  labels:
+    app: movieweb-backend
+    version: firestore
+spec:
+  ports:
+  - port: 6000
+    name: http-backend-firestore
+  selector:
+    app: movieweb-backend
+    version: firestore
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movieweb-backend-cloudsql
+  labels:
+    app: movieweb-backend
+    version: cloudsql
+spec:
+  ports:
+  - port: 6000
+    name: http-backend-cloudsql
+  selector:
+    app: movieweb-backend
+    version: cloudsql
