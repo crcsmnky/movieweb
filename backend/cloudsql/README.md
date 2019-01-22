@@ -1,13 +1,15 @@
 # Notes
 
+The Python module [Records](https://github.com/kennethreitz/records) requires `mysqlclient` but it has issues on macOS.
+
 ## mysqlclient on macOS
+
+See here for installation issues: [https://pypi.org/project/mysqlclient/](https://pypi.org/project/mysqlclient/)
 
 First
 ```bash
 brew install mysql-connector-c
 ```
-
-(See here for installation issues: [https://pypi.org/project/mysqlclient/](https://pypi.org/project/mysqlclient/))
 
 Change line 112 of `[HOMEBREW_PATH]/Cellar/mysql-connector-c/6.1.11/bin/mysql_config` from:
 
@@ -37,3 +39,7 @@ Finally:
 ```bash
 pip install mysqlclient
 ```
+
+## mysqlclient on Linux
+
+See [Super Basic MySQL jumpstart with Records for Python](https://medium.com/emoney-engineering/super-basic-mysql-with-records-for-python-83e39c408ba6)
