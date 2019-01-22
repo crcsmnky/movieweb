@@ -8,4 +8,6 @@ resources:
     zone: us-central1-f
     diskSize: 50
     machineType: n1-standard-1
+    bucketPath: gs://[BUCKETNAME]/movielens-mongodb
+    databaseName: movielens
     

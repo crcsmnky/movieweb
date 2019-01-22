@@ -42,7 +42,7 @@ resources:
           systemctl enable mongod
           systemctl start mongod
 
-          gsutil -m cp -r gs://movielens-mongodb/* .
-          mongorestore -d movieweb --noIndexRestore movieweb/
+          gsutil -m cp -r {{ properties["bucketPath"] }} .
+          mongorestore -d {{ properties["databaseName"] }} --noIndexRestore movielens-mongodb/
 
 
