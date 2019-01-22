@@ -10,7 +10,7 @@ app.secret_key = 'f8b800fdbdabda83018ed4ffb8088b9e'
 app.config['MONGO_URI'] = 'mongodb://{host}:{port}/{database}'.format(
     host=os.environ.get('MONGODB_HOST', 'localhost'),
     port=os.environ.get('MONGODB_PORT', 27017),
-    database=os.environ.get('MONGODB_DB', 'movieweb')
+    database=os.environ.get('MONGODB_DB', 'movielens')
 )
 
 mongo = PyMongo(app)
