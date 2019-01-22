@@ -43,3 +43,7 @@ pip install mysqlclient
 ## mysqlclient on Linux
 
 See [Super Basic MySQL jumpstart with Records for Python](https://medium.com/emoney-engineering/super-basic-mysql-with-records-for-python-83e39c408ba6)
+
+```
+sudo apt-get install libmysqlclient-dev
+```
