@@ -20,7 +20,7 @@ itsdangerous==1.1.0
 jdcal==1.4
 Jinja2==2.10
 MarkupSafe==1.1.0
-mysqlclient==1.4.1
+# mysqlclient==1.4.1
 odfpy==1.4.0
 openpyxl==2.5.12
 protobuf==3.6.1
