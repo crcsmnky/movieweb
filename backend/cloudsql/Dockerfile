@@ -1,6 +1,9 @@
 FROM python:2.7-slim
 
-RUN apt-get install libmysqlclient-dev
+RUN apt-get update && apt-get install -y \
+    default-libmysqlclient-dev \
+    build-essential \
+    python-dev
 
 COPY requirements.txt ./
 
