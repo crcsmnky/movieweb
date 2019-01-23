@@ -8,14 +8,11 @@ from flask import request, render_template, abort
 app = Flask(__name__)
 app.secret_key = 'f845dec4583082b8bd27d4614cb5b858'
 
-API = {
-    'host': 'localhost',
-    'port': 6000,
-    'endpoint': 'api'
-}
-
 BASE_URL = 'http://{host}:{port}/{endpoint}'.format(
-    host=API['host'], port=API['port'], endpoint=API['endpoint'])
+    host=os.environ.get('API_HOST', 'localhost'),
+    port=os.environ.get('API_PORT', 6000),
+    endpoint=os.environ.get('API_ENDPOINT', 'api')
+)
 
 
 @app.route('/', methods=['GET'])
