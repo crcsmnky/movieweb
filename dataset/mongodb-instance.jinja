@@ -43,6 +43,6 @@ resources:
           systemctl start mongod
 
           gsutil -m cp -r {{ properties["bucketPath"] }} .
-          mongorestore -d {{ properties["databaseName"] }} --noIndexRestore movielens-mongodb/
+          mongorestore -d {{ properties["databaseName"] }} --noIndexRestore movielens/
 
 
