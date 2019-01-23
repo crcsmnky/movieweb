@@ -1,3 +1,19 @@
+#
+# MOVIEWEB FRONTEND
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: movieweb-frontend
+  labels:
+    app: movieweb-frontend
+spec:
+  ports:
+  - port: 5000
+    name: http-frontend
+  selector:
+    app: movieweb-frontend
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,12 +29,29 @@ spec:
     metadata:
       labels:
         app: movieweb-frontend
+        version: v1
     spec:
       containers:
       - name: movieweb-frontend
         image: gcr.io/clown-shoes-3000/movieweb-frontend
         ports:
         - containerPort: 5000
+---
+#
+# MOVIEWEB BACKEND
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: movieweb-backend
+  labels:
+    app: movieweb-backend
+spec:
+  ports:
+  - port: 6000
+    name: http-backend
+  selector:
+    app: movieweb-backend
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -40,11 +73,11 @@ spec:
         version: mongodb
     spec:
       containers:
-      - name: movieweb-backend
+      - name: movieweb-backend-mongodb
         image: gcr.io/clown-shoes-3000/movieweb-backend-mongodb:1.0
         env:
         - name: MONGODB_HOST
-          value: "mongodb-instance.us-central1-f.c.clown-shoes-3000.internal"
+          value: mongodb
         ports:
         - containerPort: 6000
 ---
@@ -68,7 +101,7 @@ spec:
         version: firestore
     spec:
       containers:
-        - name: movieweb-backend
+        - name: movieweb-backend-firestore
           image: gcr.io/clown-shoes-3000/movieweb-backend-firestore:1.0
           ports:
           - containerPort: 6000
@@ -104,7 +137,7 @@ spec:
         version: cloudsql
     spec:
       containers:
-        - name: movieweb-backend
+        - name: movieweb-backend-cloudsql
           image: gcr.io/clown-shoes-3000/movieweb-backend-cloudsql:1.0
           ports:
           - containerPort: 6000

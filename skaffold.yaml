@@ -17,4 +17,3 @@ deploy:
   kubectl:
     manifests:
     - ./manifests/deployments.yaml
-    - ./manifests/services.yaml
