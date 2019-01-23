@@ -1,14 +1,17 @@
 apiVersion: skaffold/v1beta2
 kind: Config
 build:
+  tagPolicy:
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:{{.VERSION}}"
   artifacts:
-  - image: gcr.io/clown-shoes-3000/movieweb-frontend:1.0
+  - image: gcr.io/clown-shoes-3000/movieweb-frontend
     context: ./frontend/
-  - image: gcr.io/clown-shoes-3000/movieweb-backend-mongodb:1.0
+  - image: gcr.io/clown-shoes-3000/movieweb-backend-mongodb
     context: ./backend/mongodb/
-  - image: gcr.io/clown-shoes-3000/movieweb-backend-firestore:1.0
+  - image: gcr.io/clown-shoes-3000/movieweb-backend-firestore
     context: ./backend/firestore/
-  - image: gcr.io/clown-shoes-3000/movieweb-backend-cloudsql:1.0
+  - image: gcr.io/clown-shoes-3000/movieweb-backend-cloudsql
     context: ./backend/cloudsql/
 deploy:
   kubectl:

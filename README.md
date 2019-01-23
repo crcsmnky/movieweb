@@ -85,7 +85,7 @@ gcloud deployment-manager deployments create mongodb-instance \
 ### Building images
 
 ```
-skaffold build
+VERSION=1.0 skaffold build
 ```
 
 ### Deploying microservices
