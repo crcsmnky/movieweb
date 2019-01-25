@@ -5,14 +5,13 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     python-dev
 
+WORKDIR /opt/movieweb
+
 COPY requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend.py /opt/movieweb/
-COPY requirements.txt /opt/movieweb/
-
-WORKDIR /opt/microservices
+COPY backend.py ./
 
 EXPOSE 6000
 ENV PORT 6000
