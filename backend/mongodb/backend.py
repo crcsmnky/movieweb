@@ -22,7 +22,7 @@ def top_movies():
         ('ratings', pymongo.DESCENDING),
         ('avg_rating', pymongo.DESCENDING)
     ]).limit(8)
-    return jsonify(dumps(movies)), 200
+    return dumps(movies), 200
 
 
 @app.route('/api/movies/all', methods=['GET'])
@@ -32,31 +32,31 @@ def all_movies():
         ('ratings', pymongo.DESCENDING),
         ('avg_rating', pymongo.DESCENDING)
     ]).skip(skip).limit(20)
-    return jsonify(dumps(movies)), 200
+    return dumps(movies), 200
 
 
 @app.route('/api/movies/count', methods=['GET'])
 def all_movies_count():
     count = mongo.db.movies.count_documents({})
-    return jsonify(dumps({'count': count})), 200
+    return dumps({'count': count}), 200
 
 
 @app.route('/api/movies/<int:movieid>', methods=['GET'])
 def movie(movieid):
     movie = mongo.db.movies.find_one_or_404({'movieid': movieid})
-    return jsonify(dumps(movie)), 200
+    return dumps(movie), 200
 
 
 @app.route('/api/genres/top', methods=['GET'])
 def top_genres():
     genres = mongo.db.genres.find({}).sort('count', pymongo.DESCENDING).limit(10)
-    return jsonify(dumps(genres)), 200
+    return dumps(genres), 200
 
 
 @app.route('/api/genres/all', methods=['GET'])
 def all_genres():
     genres = mongo.db.genres.find({}).sort('count', pymongo.DESCENDING)
-    return jsonify(dumps(genres)), 200
+    return dumps(genres), 200
 
 
 @app.route('/api/genres/<name>', methods=['GET'])
@@ -65,13 +65,13 @@ def genre(name):
     movies = mongo.db.movies.find(
         {'genres': name}
     ).sort('ratings', pymongo.DESCENDING).skip(skip).limit(20)
-    return jsonify(dumps(movies)), 200
+    return dumps(movies), 200
 
 
 @app.route('/api/genres/count/<name>', methods=['GET'])
 def genre_count(name):
     count = mongo.db.movies.count_documents({'genres': name})
-    return jsonify(dumps({'count': count})), 200
+    return dumps({'count': count}), 200
 
 
 if __name__ == "__main__":
