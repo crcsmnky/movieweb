@@ -21,7 +21,7 @@ metadata:
   labels:
     app: movieweb-frontend
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: movieweb-frontend
@@ -33,7 +33,11 @@ spec:
     spec:
       containers:
       - name: movieweb-frontend
-        image: gcr.io/clown-shoes-3000/movieweb-frontend
+        image: gcr.io/clown-shoes-3000/movieweb-frontend:1.0
+        imagePullPolicy: Always
+        env:
+        - name: API_HOST
+          value: movieweb-backend
         ports:
         - containerPort: 5000
 ---
@@ -61,7 +65,7 @@ metadata:
     app: movieweb-backend
     version: mongodb
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: movieweb-backend
@@ -75,9 +79,10 @@ spec:
       containers:
       - name: movieweb-backend-mongodb
         image: gcr.io/clown-shoes-3000/movieweb-backend-mongodb:1.0
+        imagePullPolicy: Always
         env:
         - name: MONGODB_HOST
-          value: mongodb
+          value: mongodb-instance
         ports:
         - containerPort: 6000
 ---
@@ -89,7 +94,7 @@ metadata:
     app: movieweb-backend
     version: firestore
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: movieweb-backend
@@ -103,6 +108,7 @@ spec:
       containers:
         - name: movieweb-backend-firestore
           image: gcr.io/clown-shoes-3000/movieweb-backend-firestore:1.0
+          imagePullPolicy: Always
           ports:
           - containerPort: 6000
           volumeMounts:
@@ -125,7 +131,7 @@ metadata:
     app: movieweb-backend
     version: cloudsql
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: movieweb-backend
@@ -139,6 +145,7 @@ spec:
       containers:
         - name: movieweb-backend-cloudsql
           image: gcr.io/clown-shoes-3000/movieweb-backend-cloudsql:1.0
+          imagePullPolicy: Always
           ports:
           - containerPort: 6000
         - name: cloudsql-proxy
