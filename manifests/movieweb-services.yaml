@@ -1,0 +1,100 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: movieweb-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: http
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: movieweb-gateway-service
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - movieweb-gateway
+  http:
+  - match:
+    - uri:
+        exact: /
+    - uri:
+        prefix: /movies
+    - uri:
+        prefix: /genres
+    route:
+    - destination:
+        host: movieweb-frontend
+        port:
+          number: 5000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: movieweb-frontend
+spec:
+  hosts:
+  - movieweb-frontend
+  http:
+  - route:
+    - destination:
+        host: movieweb-frontend
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: movieweb-frontend
+spec:
+  host: movieweb-frontend
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: movieweb-backend
+spec:
+  host: movieweb-backend
+  subsets:
+  - name: mongodb
+    labels:
+      version: mongodb
+  - name: firestore
+    labels:
+      version: firestore
+  - name: cloudsql
+    labels:
+      version: cloudsql
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: movieweb-backend
+spec:
+  hosts:
+  - movieweb-backend
+  http:
+  - route:
+    - destination:
+        host: movieweb-backend
+        subset: mongodb
+      weight: 34
+    - destination:
+        host: movieweb-backend
+        subset: firestore
+      weight: 33
+    - destination:
+        host: movieweb-backend
+        subset: cloudsql
+      weight: 33
