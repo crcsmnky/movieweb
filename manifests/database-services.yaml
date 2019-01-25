@@ -1,0 +1,86 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mongodb
+spec:
+  hosts:
+  - mongodb-instance.us-central1-f.c.clown-shoes-3000.internal
+  - 10.128.0.15
+  - 35.232.163.226
+  addresses:
+  - 10.128.0.15/32
+  - 35.232.163.226/32
+  ports:
+  - name: mongo
+    number: 27017
+    protocol: mongo
+  location: MESH_INTERNAL
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: cloudsql
+spec:
+  hosts:
+  - 35.192.11.243
+  addresses:
+  - 35.192.11.243/32
+  ports:
+  - name: tcp
+    number: 3307
+    protocol: tcp
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: googleapis
+spec:
+  hosts:
+  - www.googleapis.com
+  - oauth2.googleapis.com
+  - firestore.googleapis.com
+  ports:
+  - number: 443
+    name: https
+    protocol: https
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: googleapis
+spec:
+  hosts:
+  - www.googleapis.com
+  - oauth2.googleapis.com
+  - firestore.googleapis.com
+  tls:
+  - match:
+    - port: 443
+      sniHosts:
+      - www.googleapis.com
+    route:
+    - destination:
+        host: www.googleapis.com
+        port:
+          number: 443
+  - match:
+    - port: 443
+      sniHosts:
+      - oauth2.googleapis.com
+    route:
+    - destination:
+        host: oauth2.googleapis.com
+        port:
+          number: 443
+  - match:
+    - port: 443
+      sniHosts:
+      - firestore.googleapis.com
+    route:
+    - destination:
+        host: firestore.googleapis.com
+        port:
+          number: 443
