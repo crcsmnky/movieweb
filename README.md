@@ -76,23 +76,64 @@ kubectl create secret generic cloudfirestore-credentials \
 
 ### MongoDB
 
+Use Deployment Manager to deploy the MongoDB instance:
+
 ```
 gcloud deployment-manager deployments create mongodb-instance \
 --config=dataset/mongodb-instance.yaml \
 --template=dataset/mongodb-instance.jinja
 ```
 
-### Building images
+By default, the instance allows traffic from other GCE instances, but the GKE Pod IP range isn't included. So create a new rule that allows traffic from the GKE Pod's IP range:
+
+```bash
+export PODIP_RANGE=$(gcloud container clusters describe [CLUSTER_NAME] --format="value(clusterIpv4Cidr")
+
+gcloud compute firewall-rules create default-allow-podip \
+--allow=tcp,udp,icmp \
+--source-ranges=$PODIP_RANGE
+```
+
+### Deploy Istio rules
+
+First create the Istio routing rules for external databases:
+
+```
+kubectl create -f manifests/database-services.yaml
+```
+
+Then create the `movieweb` routing rules:
+
+```
+kubectl create -f manifests/movieweb-services.yaml
+```
+
+### Build container images
 
 ```
 VERSION=1.0 skaffold build
 ```
 
-### Deploying microservices
+### Deploy microservices
 
 ```
 skaffold deploy
 ```
+
+Or
+
+```
+kubectl create -f manifests/deployments.yaml
+```
+
+### Monitoring, tracing, logging
+
+Prometheus:
+
+Tracing:
+
+Logging:
+
 
 ## Cleanup
 
