@@ -85,7 +85,11 @@ spec:
   hosts:
   - movieweb-backend
   http:
-  - route:
+  - fault:
+      delay:
+        fixedDelay: 2s
+        percent: 10
+    route:
     - destination:
         host: movieweb-backend
         subset: mongodb
@@ -98,3 +102,16 @@ spec:
         host: movieweb-backend
         subset: cloudsql
       weight: 33
+  # - route:
+  #   - destination:
+  #       host: movieweb-backend
+  #       subset: mongodb
+  #     weight: 34
+  #   - destination:
+  #       host: movieweb-backend
+  #       subset: firestore
+  #     weight: 33
+  #   - destination:
+  #       host: movieweb-backend
+  #       subset: cloudsql
+  #     weight: 33
