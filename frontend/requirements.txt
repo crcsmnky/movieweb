@@ -31,7 +31,7 @@ pytz==2018.9
 PyYAML==3.13
 records==0.5.2
 requests==2.20.1
-rsa==4.0
+rsa==4.7
 six==1.12.0
 SQLAlchemy==1.2.16
 tablib==0.12.1
